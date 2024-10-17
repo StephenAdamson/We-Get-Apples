@@ -1,0 +1,90 @@
+[gd_scene load_steps=11 format=3 uid="uid://4cb0es1veftn"]
+
+[ext_resource type="Texture2D" uid="uid://bxktg2kanagl4" path="res://Apple.png" id="1_8xosm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qeaol"]
+atlas = ExtResource("1_8xosm")
+region = Rect2(0, 0, 38, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gjf8n"]
+atlas = ExtResource("1_8xosm")
+region = Rect2(38, 0, 38, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56vfq"]
+atlas = ExtResource("1_8xosm")
+region = Rect2(76, 0, 38, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nsmv0"]
+atlas = ExtResource("1_8xosm")
+region = Rect2(0, 42, 38, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ccja4"]
+atlas = ExtResource("1_8xosm")
+region = Rect2(38, 42, 38, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgrx5"]
+atlas = ExtResource("1_8xosm")
+region = Rect2(76, 42, 38, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1yd81"]
+atlas = ExtResource("1_8xosm")
+region = Rect2(0, 84, 38, 42)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ku2hy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qeaol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gjf8n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56vfq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nsmv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nsmv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ccja4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dgrx5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1yd81")
+}],
+"loop": true,
+"name": &"Bob",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5dqst"]
+height = 22.0
+
+[node name="Apple" type="AnimatedSprite2D"]
+y_sort_enabled = true
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_ku2hy")
+animation = &"Bob"
+autoplay = "Bob"
+frame_progress = 0.34679
+metadata/_aseprite_wizard_config_ = {
+"layer": "",
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"slice": "",
+"source": "res://Sprites/Apple/Apple.aseprite"
+}
+metadata/_aseprite_wizard_source_file_hash_ = "d817d5e4d91b97520eff611a97bf9602"
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 1)
+shape = SubResource("CapsuleShape2D_5dqst")

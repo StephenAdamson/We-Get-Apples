@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bd7xv84q4bpfm"
+path="res://.godot/imported/Orange.aseprite-64c50b13b36cc8e173b07a407cdf9c37.res"
+
+[deps]
+
+source_file="res://Sprites/Orange/Orange.aseprite"
+dest_files=["res://.godot/imported/Orange.aseprite-64c50b13b36cc8e173b07a407cdf9c37.res"]
+
+[params]
+

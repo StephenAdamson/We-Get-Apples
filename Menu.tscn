@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://curbmm2uuf3bt"]
+
+[ext_resource type="Script" path="res://ip_input_validation.gd" id="1_mswkm"]
+[ext_resource type="Script" path="res://JoinButton.gd" id="2_lypq2"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="name" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = -100.0
+offset_top = -90.0
+offset_right = 100.0
+offset_bottom = -49.0
+placeholder_text = "Username"
+alignment = 1
+max_length = 16
+
+[node name="ip" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = -100.0
+offset_top = -45.0
+offset_right = 100.0
+offset_bottom = -4.0
+placeholder_text = "Server"
+alignment = 1
+script = ExtResource("1_mswkm")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="ip"]
+timeout = 1.0
+
+[node name="JoinButton" type="Button" parent="ip"]
+layout_mode = 0
+offset_top = 67.0
+offset_right = 200.0
+offset_bottom = 98.0
+text = "Join"
+script = ExtResource("2_lypq2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[connection signal="text_changed" from="ip" to="ip" method="_on_text_changed"]
+[connection signal="pressed" from="ip/JoinButton" to="ip/JoinButton" method="_on_pressed"]

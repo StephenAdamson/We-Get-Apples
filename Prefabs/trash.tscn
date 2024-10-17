@@ -1,0 +1,99 @@
+[gd_scene load_steps=12 format=3 uid="uid://463qj80qhxrm"]
+
+[ext_resource type="Texture2D" uid="uid://0cufcdofwt5m" path="res://Trash.png" id="1_u70if"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_box50"]
+atlas = ExtResource("1_u70if")
+region = Rect2(0, 0, 46, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_030r7"]
+atlas = ExtResource("1_u70if")
+region = Rect2(46, 0, 46, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ex8n"]
+atlas = ExtResource("1_u70if")
+region = Rect2(92, 0, 46, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_haue1"]
+atlas = ExtResource("1_u70if")
+region = Rect2(0, 54, 46, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vfhxl"]
+atlas = ExtResource("1_u70if")
+region = Rect2(46, 54, 46, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_on773"]
+atlas = ExtResource("1_u70if")
+region = Rect2(92, 54, 46, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsj52"]
+atlas = ExtResource("1_u70if")
+region = Rect2(0, 108, 46, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ouypv"]
+atlas = ExtResource("1_u70if")
+region = Rect2(46, 108, 46, 54)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qgeas"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_box50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_030r7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ex8n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_haue1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vfhxl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_on773")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lsj52")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ouypv")
+}],
+"loop": true,
+"name": &"Bob",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0lofp"]
+radius = 9.0
+height = 38.0
+
+[node name="Trash" type="AnimatedSprite2D"]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_qgeas")
+animation = &"Bob"
+autoplay = "Bob"
+frame_progress = 0.934433
+metadata/_aseprite_wizard_config_ = {
+"layer": "",
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"slice": "",
+"source": "res://Sprites/Trash/Trash.aseprite"
+}
+metadata/_aseprite_wizard_interface_config_ = {
+"layer_section": false,
+"slice_section": false
+}
+metadata/_aseprite_wizard_source_file_hash_ = "e675221ee2208cee6d308f5d8d29089c"
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 9)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_0lofp")

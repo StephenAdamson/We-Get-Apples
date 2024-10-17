@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://dg33dqd5avthv"]
+
+[ext_resource type="PackedScene" uid="uid://c0drv3s0t7gqq" path="res://Prefabs/player_1.tscn" id="1_2maos"]
+[ext_resource type="PackedScene" uid="uid://4cb0es1veftn" path="res://Prefabs/apple.tscn" id="2_i36xg"]
+[ext_resource type="PackedScene" uid="uid://463qj80qhxrm" path="res://Prefabs/trash.tscn" id="3_qnfy0"]
+[ext_resource type="Script" path="res://GameManager.gd" id="4_jyoro"]
+
+[node name="Node2D" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Player1" parent="." instance=ExtResource("1_2maos")]
+
+[node name="Apple" parent="." instance=ExtResource("2_i36xg")]
+position = Vector2(124, -55)
+frame_progress = 0.699285
+
+[node name="Trash" parent="." instance=ExtResource("3_qnfy0")]
+position = Vector2(-116, -103)
+frame_progress = 0.0154426
+
+[node name="Trash2" parent="." instance=ExtResource("3_qnfy0")]
+position = Vector2(105, 58)
+
+[node name="Apple2" parent="." instance=ExtResource("2_i36xg")]
+position = Vector2(42, -127)
+
+[node name="Apple3" parent="." instance=ExtResource("2_i36xg")]
+position = Vector2(-90, 44)
+
+[node name="Apple4" parent="." instance=ExtResource("2_i36xg")]
+position = Vector2(-52, -141)
+
+[node name="Apple5" parent="." instance=ExtResource("2_i36xg")]
+position = Vector2(-190, 58)
+
+[node name="Apple6" parent="." instance=ExtResource("2_i36xg")]
+position = Vector2(105, 111)
+
+[node name="Apple7" parent="." instance=ExtResource("2_i36xg")]
+position = Vector2(149, 6)
+
+[node name="Apple8" parent="." instance=ExtResource("2_i36xg")]
+position = Vector2(-145, -14)
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("4_jyoro")

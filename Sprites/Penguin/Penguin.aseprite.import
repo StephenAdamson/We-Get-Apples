@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dlactdcmdh81v"
+path="res://.godot/imported/Penguin.aseprite-e5244d12c20dcde1d19ac8c1cce2e280.res"
+
+[deps]
+
+source_file="res://Sprites/Penguin/Penguin.aseprite"
+dest_files=["res://.godot/imported/Penguin.aseprite-e5244d12c20dcde1d19ac8c1cce2e280.res"]
+
+[params]
+
