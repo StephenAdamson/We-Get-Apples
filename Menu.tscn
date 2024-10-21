@@ -1,48 +1,56 @@
-[gd_scene load_steps=3 format=3 uid="uid://curbmm2uuf3bt"]
+[gd_scene load_steps=2 format=3 uid="uid://curbmm2uuf3bt"]
 
-[ext_resource type="Script" path="res://ip_input_validation.gd" id="1_mswkm"]
-[ext_resource type="Script" path="res://JoinButton.gd" id="2_lypq2"]
+[ext_resource type="Script" path="res://Menu.gd" id="1_hdpv7"]
 
-[node name="Menu" type="Control"]
+[node name="LobbyMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_hdpv7")
 
-[node name="name" type="LineEdit" parent="."]
-layout_mode = 0
-offset_left = -100.0
-offset_top = -90.0
-offset_right = 100.0
-offset_bottom = -49.0
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+timeout = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -137.5
+offset_top = -74.5
+offset_right = 137.5
+offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UserName" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 placeholder_text = "Username"
 alignment = 1
 max_length = 16
 
-[node name="ip" type="LineEdit" parent="."]
-layout_mode = 0
-offset_left = -100.0
-offset_top = -45.0
-offset_right = 100.0
-offset_bottom = -4.0
+[node name="IP Address" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 placeholder_text = "Server"
 alignment = 1
-script = ExtResource("1_mswkm")
 
-[node name="HTTPRequest" type="HTTPRequest" parent="ip"]
-timeout = 1.0
+[node name="HostButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Host"
 
-[node name="JoinButton" type="Button" parent="ip"]
-layout_mode = 0
-offset_top = 67.0
-offset_right = 200.0
-offset_bottom = 98.0
+[node name="JoinButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 text = "Join"
-script = ExtResource("2_lypq2")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
-[connection signal="text_changed" from="ip" to="ip" method="_on_text_changed"]
-[connection signal="pressed" from="ip/JoinButton" to="ip/JoinButton" method="_on_pressed"]
+[connection signal="text_changed" from="VBoxContainer/IP Address" to="." method="_on_text_changed"]
+[connection signal="pressed" from="VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

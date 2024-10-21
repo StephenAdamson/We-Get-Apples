@@ -1,108 +1,115 @@
 extends Node
 
-# Autoload named Lobby
+# Signals to notify when a new player joins or a player disconnects.
+signal add_new_player
+signal delete_player
 
-# These signals can be connected to by a UI lobby scene or the game scene.
-signal player_connected(peer_id, player_info)
-signal player_disconnected(peer_id)
-signal server_disconnected
+# Preload the game world scene.
+const WORLD_SCENE := preload("res://game.tscn")
 
-const PORT = 13212
-const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
-const MAX_CONNECTIONS = 9
-
-# This will contain player info for every player,
-# with the keys being each player's unique IDs.
+# Dictionary to store player information (ID, name, etc.).
 var players = {}
-
-# This is the local player info. This should be modified locally
-# before the connection is made. It will be passed to every other peer.
-# For example, the value of "name" can be set to something the player
-# entered in a UI scene.
-var player_info = {"name": "Name"}
-
-var players_loaded = 0
-
+var peer := ENetMultiplayerPeer.new() # Create a new ENet peer for networking.
 
 func _ready():
-	multiplayer.peer_connected.connect(_on_player_connected)
-	multiplayer.peer_disconnected.connect(_on_player_disconnected)
-	multiplayer.connected_to_server.connect(_on_connected_ok)
-	multiplayer.connection_failed.connect(_on_connected_fail)
+	# Connect multiplayer signals for player connections, disconnections, and server status changes.
+	multiplayer.peer_connected.connect(_on_peer_connected)
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
-func join_game(address = ""):
-	if address.is_empty():
-		address = DEFAULT_SERVER_IP
-	var peer = ENetMultiplayerPeer.new()
-	var error = peer.create_client(address, PORT)
-	if error:
-		return error
-	multiplayer.multiplayer_peer = peer
+# Method for a player (client) to join a server.
+func join_server(ip_address: String, port: int):
+	var error = peer.create_client(ip_address, port) # Create a client connection.
+	if not error == OK: return error # Return the error if connection fails.
+
+	multiplayer.set_multiplayer_peer(peer) # Set the peer for multiplayer operations.
 
 
-func create_game():
-	var peer = ENetMultiplayerPeer.new()
-	var error = peer.create_server(PORT, MAX_CONNECTIONS)
-	if error:
-		return error
-	multiplayer.multiplayer_peer = peer
+# Method to start a server (host).
+func start_server(server_port: int, max_clients: int):
+	var error = peer.create_server(server_port, max_clients) # Create a server.
+	if not error == OK: return error # Return the error if server creation fails.
 
-	players[1] = player_info
-	player_connected.emit(1, player_info)
-
-
-func remove_multiplayer_peer():
-	multiplayer.multiplayer_peer = null
-
-
-# When the server decides to start the game from a UI scene,
-# do Lobby.load_game.rpc(filepath)
-@rpc("call_local", "reliable")
-func load_game(game_scene_path):
-	get_tree().change_scene_to_file(game_scene_path)
+	multiplayer.set_multiplayer_peer(peer) # Set the peer for multiplayer operations.
+	
+	
+	var peer_id = multiplayer.get_unique_id() # Get the unique ID for the server host (self).
+	
+	# Store the player's info
+	players[peer_id] = { "player_name": GameManager.user_name }
+	
+	# Instance the game world and emit signal to add this player.
+	instance_world()
+	add_new_player.emit(peer_id)
 
 
-# Every peer will call this when they have loaded the game scene.
-@rpc("any_peer", "call_local", "reliable")
-func player_loaded():
-	if multiplayer.is_server():
-		players_loaded += 1
-		if players_loaded == players.size():
-			$/root/Game.start_game()
-			players_loaded = 0
+# Callback when a new peer (player) connects.
+func _on_peer_connected(id: int):
+	if not multiplayer.is_server(): return # Only the server needs to handle this.
+	
+	# Inform the new player about the existing players.
+	for existing_peer_id in players.keys():
+		var player_info = players[existing_peer_id]
+		rpc_id(id, "instance_player", existing_peer_id, player_info["player_name"]) # Send info to the new player.
 
 
-# When a peer connects, send them my player info.
-# This allows transfer of all desired data for each player, not only the unique ID.
-func _on_player_connected(id):
-	_register_player.rpc_id(id, player_info)
-
-
-@rpc("any_peer", "reliable")
-func _register_player(new_player_info):
-	var new_player_id = multiplayer.get_remote_sender_id()
-	players[new_player_id] = new_player_info
-	player_connected.emit(new_player_id, new_player_info)
-
-
-func _on_player_disconnected(id):
+# Callback when a peer (player) disconnects.
+func _on_peer_disconnected(id):
+	if not multiplayer.is_server(): return # Only the server needs to handle this.
+	
+	# Remove the disconnected player from the player list.
 	players.erase(id)
-	player_disconnected.emit(id)
+	rpc("remove_player", id) # Notify all clients to remove the disconnected player
 
 
-func _on_connected_ok():
-	var peer_id = multiplayer.get_unique_id()
-	players[peer_id] = player_info
-	player_connected.emit(peer_id, player_info)
+# Callback when connected to a server.
+func _on_connected_to_server():
+	# Notify the server of the player's name and ID.
+	register_players.rpc_id(1, GameManager.user_name, multiplayer.get_unique_id())
+	instance_world() # Instance the game world for this player.
 
 
-func _on_connected_fail():
-	multiplayer.multiplayer_peer = null
+# Helper method to instance the game world scene.
+func instance_world():
+	if not WORLD_SCENE.can_instantiate(): return # Ensure the scene is instantiable.
+	
+	var world = WORLD_SCENE.instantiate() # Instance the game world.
+	get_tree().root.add_child(world) # Add the world to the scene tree.
 
 
+# Callback when connection to the server fails.
+func _on_connection_failed():
+	multiplayer.set_multiplayer_peer(null) # Reset multiplayer peer.
+
+
+# Callback when the server disconnects.
 func _on_server_disconnected():
-	multiplayer.multiplayer_peer = null
-	players.clear()
-	server_disconnected.emit()
+	multiplayer.set_multiplayer_peer(null) # Reset multiplayer peer.
+	get_tree().call_group('World', 'server_disconnected') # Inform the game world of the disconnection.
+
+
+# Remote procedure call to instance a player on all clients.
+@rpc("authority", "call_local", "reliable")
+func instance_player(id: int, _player_name: String) -> void:
+	add_new_player.emit(id) # Emit signal to add the new player.
+
+
+# Remote procedure call to remove a player on all clients.
+@rpc("authority", "call_local", "reliable")
+func remove_player(id: int):
+	delete_player.emit(id) # Emit signal to remove the player.
+
+
+# Remote procedure call to register players with their name and ID.
+@rpc("any_peer", "call_local", "reliable")
+func register_players(peer_name: String, peer_id: int) -> void:
+	if players.has(peer_id): return # Do nothing if the player is already registered.
+	
+	# Register the new player's name and ID.
+	players[peer_id] = { "player_name": peer_name }
+	
+	# Inform all clients about the new player.
+	rpc("instance_player",  peer_id, players[peer_id].player_name)

@@ -1,16 +1,17 @@
 [gd_scene load_steps=5 format=3 uid="uid://dg33dqd5avthv"]
 
-[ext_resource type="PackedScene" uid="uid://c0drv3s0t7gqq" path="res://Prefabs/player_1.tscn" id="1_2maos"]
+[ext_resource type="Script" path="res://game.gd" id="1_bwkon"]
 [ext_resource type="PackedScene" uid="uid://4cb0es1veftn" path="res://Prefabs/apple.tscn" id="2_i36xg"]
 [ext_resource type="PackedScene" uid="uid://463qj80qhxrm" path="res://Prefabs/trash.tscn" id="3_qnfy0"]
 [ext_resource type="Script" path="res://GameManager.gd" id="4_jyoro"]
 
-[node name="Node2D" type="Node2D"]
+[node name="World" type="Node2D" groups=["World"]]
 y_sort_enabled = true
+script = ExtResource("1_bwkon")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
-[node name="Player1" parent="." instance=ExtResource("1_2maos")]
+[node name="Players" type="Node2D" parent="."]
 
 [node name="Apple" parent="." instance=ExtResource("2_i36xg")]
 position = Vector2(124, -55)
@@ -46,3 +47,14 @@ position = Vector2(-145, -14)
 
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("4_jyoro")
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="Position1" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(-35, -47)
+
+[node name="Position2" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(-32, 26)
+
+[node name="Position3" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(64, -27)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=131 format=3 uid="uid://c0drv3s0t7gqq"]
+[gd_scene load_steps=132 format=3 uid="uid://c0drv3s0t7gqq"]
 
 [ext_resource type="Texture2D" uid="uid://ckp602mgl80sv" path="res://Sprites/Shadow.png" id="1_r0hnu"]
 [ext_resource type="Texture2D" uid="uid://04b5p4crsuk8" path="res://Penguin.png" id="2_si8cr"]
@@ -9,6 +9,14 @@ script/source = "extends CharacterBody2D
 
 @export var speed = 400
 var score = 0
+
+func _enter_tree() -> void:
+	set_multiplayer_authority(name.to_int())
+
+func _ready() -> void:
+	if not is_multiplayer_authority():
+		set_physics_process(false)
+
 
 func get_input():
 	var input_direction = Input.get_vector(\"left\", \"right\", \"up\", \"down\")
@@ -37,7 +45,9 @@ func get_input():
 	else:
 			$AnimatedSprite2D.stop()
 
-func _physics_process(delta):
+func _physics_process(_delta):
+	if not is_multiplayer_authority(): return
+	
 	get_input()
 	move_and_slide()
 "
@@ -1013,6 +1023,17 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_o7f14"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("AnimatedSprite2D:animation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("AnimatedSprite2D:frame")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
 [node name="Player1" type="CharacterBody2D"]
 y_sort_enabled = true
 motion_mode = 1
@@ -1052,3 +1073,9 @@ metadata/_aseprite_wizard_interface_config_ = {
 "slice_section": true
 }
 metadata/_aseprite_wizard_source_file_hash_ = "34c2b001cfecd21bc8de4fb3259c4609"
+
+[node name="Trash Holder" type="Node2D" parent="."]
+position = Vector2(0, -81)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_o7f14")

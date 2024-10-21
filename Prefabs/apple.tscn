@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://4cb0es1veftn"]
+[gd_scene load_steps=12 format=3 uid="uid://4cb0es1veftn"]
 
 [ext_resource type="Texture2D" uid="uid://bxktg2kanagl4" path="res://Apple.png" id="1_8xosm"]
+[ext_resource type="Script" path="res://Prefabs/apple.gd" id="2_0u0ue"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qeaol"]
 atlas = ExtResource("1_8xosm")
@@ -72,6 +73,7 @@ sprite_frames = SubResource("SpriteFrames_ku2hy")
 animation = &"Bob"
 autoplay = "Bob"
 frame_progress = 0.34679
+script = ExtResource("2_0u0ue")
 metadata/_aseprite_wizard_config_ = {
 "layer": "",
 "o_ex_p": "",
@@ -88,3 +90,5 @@ metadata/_aseprite_wizard_source_file_hash_ = "d817d5e4d91b97520eff611a97bf9602"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, 1)
 shape = SubResource("CapsuleShape2D_5dqst")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]
