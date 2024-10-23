@@ -1,10 +1,13 @@
 extends AnimatedSprite2D
 
-@onready var area_2d = $Area2D
+signal item_deleted(item_id)
 
-func _on_body_entered(body: Node):
-	if body.has_node("Trash Holder"):
-		area_2d.body_entered.disconnect(_on_body_entered)
-		$Area2D/CollisionShape2D.call_deferred("set_disabled", true)
-		call_deferred("reparent", body.get_node("Trash Holder"))
-		call_deferred("set_position", Vector2.ZERO)
+var item_id : String  # Unique identifier for this item
+
+func _on_body_entered(_body):
+	if is_multiplayer_authority():
+		# Emit the signal with the unique item_id
+		emit_signal("item_deleted", item_id)
+
+	# Queue this instance for deletion
+	call_deferred("queue_free")

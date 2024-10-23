@@ -1,22 +1,3 @@
-extends Node
+extends Node2D
 
-var score: int = 0 
-var user_name: String = "" # Current user's name.
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
-
-func players_init():
-	pass
-
-func items_init():
-	pass
-
-func networked_score_keeping_probably_I_dont_know_man_its_a_prototype():
-	pass
+var local_user_name: String = ""

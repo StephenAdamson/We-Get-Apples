@@ -8,13 +8,13 @@ extends Control
 
 func _on_host_button_pressed():
 	hide()
-	GameManager.user_name = get_node("VBoxContainer/UserName").text
+	GameManager.local_user_name = get_node("VBoxContainer/UserName").text
 	Lobby.start_server(server_port, max_clients)
 
 
 func _on_join_button_pressed():
 	hide()
-	GameManager.user_name = get_node("VBoxContainer/UserName").text
+	GameManager.local_user_name = get_node("VBoxContainer/UserName").text
 	Lobby.join_server(default_ip_address, server_port)
 
 # ==================================================================

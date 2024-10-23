@@ -72,6 +72,8 @@ radius = 9.0
 height = 38.0
 
 [node name="Trash" type="AnimatedSprite2D"]
+z_as_relative = false
+y_sort_enabled = true
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_qgeas")
 animation = &"Bob"
@@ -94,7 +96,6 @@ metadata/_aseprite_wizard_interface_config_ = {
 metadata/_aseprite_wizard_source_file_hash_ = "e675221ee2208cee6d308f5d8d29089c"
 
 [node name="Area2D" type="Area2D" parent="."]
-position = Vector2(-39, 55)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, 9)

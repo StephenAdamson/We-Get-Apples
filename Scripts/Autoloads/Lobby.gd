@@ -11,6 +11,7 @@ const WORLD_SCENE := preload("res://game.tscn")
 var players = {}
 var peer := ENetMultiplayerPeer.new() # Create a new ENet peer for networking.
 
+
 func _ready():
 	# Connect multiplayer signals for player connections, disconnections, and server status changes.
 	multiplayer.peer_connected.connect(_on_peer_connected)
@@ -38,8 +39,8 @@ func start_server(server_port: int, max_clients: int):
 	
 	var peer_id = multiplayer.get_unique_id() # Get the unique ID for the server host (self).
 	
-	# Store the player's info
-	players[peer_id] = { "player_name": GameManager.user_name }
+	# # Store the player's info
+	players[peer_id] = { "player_name": GameManager.local_user_name }
 	
 	# Instance the game world and emit signal to add this player.
 	instance_world()
@@ -68,7 +69,7 @@ func _on_peer_disconnected(id):
 # Callback when connected to a server.
 func _on_connected_to_server():
 	# Notify the server of the player's name and ID.
-	register_players.rpc_id(1, GameManager.user_name, multiplayer.get_unique_id())
+	register_players.rpc_id(1, GameManager.local_user_name, multiplayer.get_unique_id())
 	instance_world() # Instance the game world for this player.
 
 
